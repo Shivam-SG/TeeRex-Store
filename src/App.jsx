@@ -7,7 +7,7 @@ import productsData from './data/products';
 
 const App = () => {
   const [cartItems, setCartItems] = useState([]);
-  const [filters, setFilters] = useState({ search: '', gender: '', color: '', type: '' });
+  const [filters, setFilters] = useState({ search: '', gender: '', color: '', type: '', price: '' });
 
   const addToCart = (product) => {
     setCartItems((prevItems) => {
@@ -59,9 +59,15 @@ const App = () => {
           product.type.toLowerCase().includes(filters.search.toLowerCase())) &&
         (filters.gender === '' || product.gender === filters.gender) &&
         (filters.color === '' || product.color === filters.color) &&
-        (filters.type === '' || product.type === filters.type)
+        (filters.type === '' || product.type === filters.type) &&
+        (filters.price === '' || checkPriceRange(product.price, filters.price))
       );
     });
+  };
+
+  const checkPriceRange = (price, range) => {
+    const [min, max] = range.split('-').map(Number);
+    return price >= min && price <= max;
   };
 
   const handleFilterChange = (key, value) => {
@@ -69,7 +75,7 @@ const App = () => {
   };
 
   const handleClearFilters = () => {
-    setFilters({ search: '', gender: '', color: '', type: '' });
+    setFilters({ search: '', gender: '', color: '', type: '', price: '' });
   };
 
   return (
